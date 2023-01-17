@@ -38,8 +38,10 @@ int main(void)
 	initialize_world();
 
 
-	for (n = 0; n < NUM_GENERATIONS; n++)
+	for (n = 0; n < NUM_GENERATIONS; n++) {
+		output_world();
 		next_generation();
+	}
 
 	/* TODO: output final world state */
 	output_world();
@@ -54,6 +56,11 @@ void next_generation(void) {
 
 	   Hint: use get_next_state(x,y) */
 
+	for (int x = 0, width = get_world_width(); x < width; ++x) {
+		for (int y = 0, height = get_world_height(); y < height; ++y) {
+			set_cell_state(x, y, get_next_state(x, y));
+		}
+	}
 
 	finalize_evolution(); /*   */
 }
@@ -65,6 +72,18 @@ int get_next_state(int x, int y) {
 	   Use num_neighbors(x,y) to compute the number of live
 	   neighbors */
 
+	int	neighbors = num_neighbors(x, y);
+
+	if (get_cell_state(x, y) == ALIVE) {
+		if (neighbors >= 2 && neighbors <= 3) {
+			return ALIVE;
+		} else {
+			return DEAD; 
+		}
+	} else if (neighbors == 3) {
+		return ALIVE;
+	}
+	return DEAD;
 }
 
 int num_neighbors(int x, int y) {
@@ -72,5 +91,15 @@ int num_neighbors(int x, int y) {
 	   neighbors that are ALIVE
 
 	   Use get_cell_state(x,y) */
+	int	neighbors_dst = 0;
 
+	for (int i = -1; i <= 1; ++i) {
+		for (int j = -1; j <= 1; ++j) {
+			if (i == 0 && j == 0) {
+				continue;
+			}
+			neighbors_dst += get_cell_state(x + i, y + j);
+		}
+	}
+	return neighbors_dst;
 }
