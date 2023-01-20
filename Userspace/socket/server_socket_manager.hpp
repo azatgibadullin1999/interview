@@ -4,6 +4,8 @@
 # include <exception>
 # include <vector>
 # include <sys/socket.h>
+# include <sys/types.h>
+# include <netdb.h>
 # include <netinet/in.h>
 # include <arpa/inet.h>
 # include <string.h>
@@ -16,14 +18,14 @@
 # include "connection.hpp"
 //
 
-class SocketManager {
+class ServerSocketManager final {
 	public:
-		SocketManager();
-		SocketManager(const SocketManager &other) = delete;
-		SocketManager&	operator=(const SocketManager &other) = delete;
-		SocketManager(SocketManager &&other) = delete;
-		SocketManager&	operator=(SocketManager &&other) = delete;
-		~SocketManager();
+		ServerSocketManager(const std::string &ip);
+		ServerSocketManager(const ServerSocketManager &other) = delete;
+		ServerSocketManager&	operator=(const ServerSocketManager &other) = delete;
+		ServerSocketManager(ServerSocketManager &&other) = delete;
+		ServerSocketManager&	operator=(ServerSocketManager &&other) = delete;
+		~ServerSocketManager();
 
 		std::vector<Connection>	poll();
 		void			deleteClient(Connection &con);

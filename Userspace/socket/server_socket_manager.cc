@@ -1,6 +1,6 @@
 #include "socket_manager.hpp"
 
-SocketManager::SocketManager() {
+ServerSocketManager::ServerSocketManager(const std::string &ip) {
 	pollfd	server_socket;
 	int	listen_fd;
 	int	opt_val = 1;
@@ -9,21 +9,27 @@ SocketManager::SocketManager() {
 		throw std::exception();
 	}
 	if (setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<const void *>(&opt_val), sizeof(opt_val)) < 0) {
+		close(listen_fd);
 		throw std::exception();
 	}
 	if (ioctl(listen_fd, FIONBIO, reinterpret_cast<void *>(&opt_val)) < 0) {
+		close(listen_fd);
 		throw std::exception();
 	}
 
 	memset(&addr_, 0, sizeof(sockaddr_in));
 	addr_.sin_family = AF_INET;
-	addr_.sin_port = htons(1488);
-	inet_aton("127.0.0.1", &addr_.sin_addr);
-
+	addr_.sin_port = htons(2510);
+	if (!inet_aton(ip.c_str(), &addr_.sin_addr)) {
+		close(listen_fd);
+		throw std::exception();
+	}
 	if ((bind(listen_fd, reinterpret_cast<sockaddr*>(&addr_), sizeof(addr_))) < 0) {
+		close(listen_fd);
 		throw std::exception();
 	}
 	if ((listen(listen_fd, 128)) < 0) {
+		close(listen_fd);
 		throw std::exception();
 	}
 
@@ -32,9 +38,13 @@ SocketManager::SocketManager() {
 	pollfds_.push_back(std::move(server_socket));
 }
 
-SocketManager::~SocketManager() { }
+ServerSocketManager::~ServerSocketManager() {
+	for (auto it = pollfds_.begin(), ite = pollfds_.end(); it != ite; ++it) {
+		close(it->fd);
+	}
+}
 
-std::vector<Connection>	SocketManager::poll() {
+std::vector<Connection>	ServerSocketManager::poll() {
 	int num_of_events = ::poll(pollfds_.data(), pollfds_.size(), 2000);
 	std::vector<Connection>	ret_connections;
 
@@ -58,7 +68,7 @@ std::vector<Connection>	SocketManager::poll() {
 	return ret_connections;
 }
 
-void		SocketManager::deleteClient(Connection &con) {
+void		ServerSocketManager::deleteClient(Connection &con) {
 	int	socket_for_delete = con.getSocket__();
 	auto	it = pollfds_.begin();
 
@@ -67,15 +77,21 @@ void		SocketManager::deleteClient(Connection &con) {
 	pollfds_.erase(it);
 }
 
-void		SocketManager::sendAll(const std::string &msg, const Connection &from) {
+void		ServerSocketManager::sendAll(const std::string &msg, const Connection &from) {
+	Connection	buff_of_connection;
+
 	for (auto it = pollfds_.begin(), ite = pollfds_.end(); it != ite; ++it) {
+		buff_of_connection = Connection(it->fd);
 		if (it->fd != from.getSocket__()) {
-			Connection(it->fd).send(msg);
+			buff_of_connection.send(msg);
+			if (buff_of_connection.isClosed()) {
+				deleteClient(buff_of_connection);
+			}
 		}
 	}
 }
 
-void		SocketManager::addClient__() {
+void		ServerSocketManager::addClient__() {
 	pollfd	new_client;
 
 	new_client.fd = accept(pollfds_[0].fd, NULL, NULL);
