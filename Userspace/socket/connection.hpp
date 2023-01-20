@@ -7,7 +7,7 @@
 # include <iostream>
 //
 
-class Connection {
+class Connection final {
 	public:
 		Connection();
 		Connection(int sock);
@@ -25,7 +25,8 @@ class Connection {
 		int		socket_;
 		bool		is_closed_;
 
-		friend	class SocketManager;
+		friend class ServerSocketManager;
+		friend class ClientSocketManager;
 };
 
 #endif // USERSPACE_SOCKET_CONNECTION_HPP_
