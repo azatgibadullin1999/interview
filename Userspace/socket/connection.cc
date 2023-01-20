@@ -1,5 +1,7 @@
 #include "connection.hpp"
 
+Connection::Connection() : socket_(-1) { }
+
 Connection::Connection(int sock) :
 	socket_(sock), is_closed_(false) { }
 

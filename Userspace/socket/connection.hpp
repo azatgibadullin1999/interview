@@ -9,7 +9,7 @@
 
 class Connection {
 	public:
-		Connection() = delete;
+		Connection();
 		Connection(int sock);
 		Connection(const Connection &other);
 		Connection	&operator=(const Connection &other);
