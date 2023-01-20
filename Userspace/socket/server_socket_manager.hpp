@@ -16,9 +16,10 @@
 # include <sys/ioctl.h>
 # include <iostream>
 # include "connection.hpp"
+# include "socket_manager_base.hpp"
 //
 
-class ServerSocketManager final {
+class ServerSocketManager final : private SocketManagerBase_ {
 	public:
 		ServerSocketManager(const std::string &ip);
 		ServerSocketManager(const ServerSocketManager &other) = delete;

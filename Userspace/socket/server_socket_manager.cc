@@ -1,19 +1,13 @@
-#include "socket_manager.hpp"
+#include "server_socket_manager.hpp"
 
 ServerSocketManager::ServerSocketManager(const std::string &ip) {
 	pollfd	server_socket;
-	int	listen_fd;
 	int	opt_val = 1;
 
-	if ((listen_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+	if (setsockopt(socket_, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<const void *>(&opt_val), sizeof(opt_val)) < 0) {
 		throw std::exception();
 	}
-	if (setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<const void *>(&opt_val), sizeof(opt_val)) < 0) {
-		close(listen_fd);
-		throw std::exception();
-	}
-	if (ioctl(listen_fd, FIONBIO, reinterpret_cast<void *>(&opt_val)) < 0) {
-		close(listen_fd);
+	if (ioctl(socket_, FIONBIO, reinterpret_cast<void *>(&opt_val)) < 0) {
 		throw std::exception();
 	}
 
@@ -21,19 +15,16 @@ ServerSocketManager::ServerSocketManager(const std::string &ip) {
 	addr_.sin_family = AF_INET;
 	addr_.sin_port = htons(2510);
 	if (!inet_aton(ip.c_str(), &addr_.sin_addr)) {
-		close(listen_fd);
 		throw std::exception();
 	}
-	if ((bind(listen_fd, reinterpret_cast<sockaddr*>(&addr_), sizeof(addr_))) < 0) {
-		close(listen_fd);
+	if ((bind(socket_, reinterpret_cast<sockaddr*>(&addr_), sizeof(addr_))) < 0) {
 		throw std::exception();
 	}
-	if ((listen(listen_fd, 128)) < 0) {
-		close(listen_fd);
+	if ((listen(socket_, 128)) < 0) {
 		throw std::exception();
 	}
 
-	server_socket.fd = listen_fd;
+	server_socket.fd = socket_;
 	server_socket.events = POLLIN;
 	pollfds_.push_back(std::move(server_socket));
 }

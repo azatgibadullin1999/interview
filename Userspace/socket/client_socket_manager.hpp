@@ -11,9 +11,10 @@
 # include <string.h>
 
 # include "connection.hpp"
+# include "socket_manager_base.hpp"
 
 
-class ClientSocketManager final {
+class ClientSocketManager final : private SocketManagerBase_ {
 	public :
 		ClientSocketManager(const std::string &ip);
 		ClientSocketManager(const ClientSocketManager &other) = delete;
