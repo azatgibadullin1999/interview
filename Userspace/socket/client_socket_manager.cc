@@ -14,10 +14,8 @@ ClientSocketManager::ClientSocketManager(const std::string &ip) {
 	std::cout << "start like client" << std::endl;
 }
 
-ClientSocketManager::~ClientSocketManager() {
-	close(con_.getSocket__());
-}
+ClientSocketManager::~ClientSocketManager() { }
 
 Connection	ClientSocketManager::getConnection() const {
-	return con_;
+	return Connection(socket_);
 }

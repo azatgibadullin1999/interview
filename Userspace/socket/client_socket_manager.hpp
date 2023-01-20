@@ -26,7 +26,6 @@ class ClientSocketManager final : private SocketManagerBase_ {
 		Connection	getConnection() const;
 		
 	private :
-		Connection	con_;
 		sockaddr_in	addr_;
 
 } ;
