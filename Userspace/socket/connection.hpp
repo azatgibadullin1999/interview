@@ -17,7 +17,7 @@ class Connection {
 		Connection	&operator=(Connection &&other) noexcept;
 		~Connection();
 
-		void		send(std::string &msg);
+		void		send(const std::string &msg);
 		std::string	recive();
 		bool		isClosed() const;
 	private:

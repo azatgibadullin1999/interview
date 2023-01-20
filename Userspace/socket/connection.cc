@@ -23,7 +23,7 @@ Connection	&Connection::operator=(Connection &&other) noexcept {
 
 Connection::~Connection() { }
 
-void		Connection::send(std::string &msg) {
+void		Connection::send(const std::string &msg) {
 	if (::send(socket_, msg.c_str(), msg.size(), 0) < 0) {
 		is_closed_ = true;
 	}
