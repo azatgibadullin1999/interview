@@ -3,6 +3,7 @@
 
 
 # include <exception>
+# include <utility>
 # include <sys/socket.h>
 # include <unistd.h>
 
@@ -14,22 +15,32 @@ class SocketManagerBase_ {
 		SocketManagerBase_&	operator=(const SocketManagerBase_ &other) = delete;
 		SocketManagerBase_(SocketManagerBase_ &&other) = delete;
 		SocketManagerBase_&	operator=(SocketManagerBase_ &&other) = delete;
-		~SocketManagerBase_();
+		virtual ~SocketManagerBase_();
 
 	protected :
 		int	socket_;
 } ;
 
 
-// class SocketError : public std::exception {
-// 	public :
-// 		SocketError() { }
-// 		virtual ~SocketError() { }
+namespace ft {
 
-// 		virtual const char	*what() const noexcept {
-// 			return "Socket error";
-// 		}
-// } ;
+	struct SocketError : public std::exception {
+		SocketError() { }
+		virtual ~SocketError() { }
+		virtual const char	*what() const noexcept {
+			return "Socket error\n";
+		}
+	} ;
+
+	struct ConnectionError : SocketError {
+		ConnectionError() { }
+		virtual ~ConnectionError() { }
+		virtual const char	*what() const noexcept {
+			return "connect() failed\n";
+		}
+	} ;
+
+}
 
 // class SetsockportError : public SocketError {
 // 	public :
@@ -62,4 +73,4 @@ class SocketManagerBase_ {
 // } ;
 
 
-#endif USERSPACE_SOCKET_SOCKET_MANAGER_BASE_HPP_
+#endif // USERSPACE_SOCKET_SOCKET_MANAGER_BASE_HPP_

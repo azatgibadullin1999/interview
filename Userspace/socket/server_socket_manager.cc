@@ -71,7 +71,7 @@ void		ServerSocketManager::deleteClient(Connection &con) {
 void		ServerSocketManager::sendAll(const std::string &msg, const Connection &from) {
 	Connection	buff_of_connection;
 
-	for (auto it = pollfds_.begin(), ite = pollfds_.end(); it != ite; ++it) {
+	for (auto it = ++pollfds_.begin(), ite = pollfds_.end(); it != ite; ++it) {
 		buff_of_connection = Connection(it->fd);
 		if (it->fd != from.getSocket__()) {
 			buff_of_connection.send(msg);

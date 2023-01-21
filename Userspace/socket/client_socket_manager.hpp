@@ -9,9 +9,12 @@
 # include <netinet/in.h>
 # include <arpa/inet.h>
 # include <string.h>
+# include <fcntl.h>
 
 # include "connection.hpp"
 # include "socket_manager_base.hpp"
+
+# include <poll.h>
 
 
 class ClientSocketManager final : private SocketManagerBase_ {
@@ -24,9 +27,11 @@ class ClientSocketManager final : private SocketManagerBase_ {
 		~ClientSocketManager();
 
 		Connection	getConnection() const;
+		int		poll();
 		
 	private :
 		sockaddr_in	addr_;
+		pollfd		pollfds_[2];
 
 } ;
 

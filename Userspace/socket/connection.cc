@@ -37,6 +37,7 @@ std::string	Connection::recive() {
 	int		ret_value = sizeof(tmp);
 
 	while (ret_value == sizeof(tmp) && ((ret_value = recv(socket_, tmp, sizeof(tmp), 0)) > 0)) {
+		tmp[ret_value] = '\0';
 		dst += tmp;
 	}
 	if (ret_value == 0) {
