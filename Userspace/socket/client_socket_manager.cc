@@ -41,3 +41,8 @@ int		ClientSocketManager::poll() {
 	}
 	return -1;
 }
+
+void		ClientSocketManager::endSession() {
+	std::cout << "connection is lost" << std::endl;
+	exit(1);
+}
