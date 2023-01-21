@@ -1,4 +1,8 @@
-#include "server.hpp"
+// #include "server.hpp"
+
+# include "../socket/server_socket_manager.hpp"
+
+namespace Server {
 
 void	Start(const std::string &ip) {
 	ServerSocketManager	serv_socket(ip);
@@ -20,4 +24,6 @@ void	Start(const std::string &ip) {
 			serv_socket.sendAll(msg, *it);
 		}
 	}
+}
+
 }

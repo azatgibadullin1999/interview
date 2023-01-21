@@ -13,7 +13,7 @@
 
 namespace Server {
 
-	void	Start();
+	void	Start(const std::string &ip);
 
 }
 

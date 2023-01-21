@@ -1,7 +1,29 @@
-#include "client.hpp"
+// #include "client.hpp"
+
+# include "../socket/client_socket_manager.hpp"
+# include <cstdlib>
+# include <ctime>
 
 
 namespace {
+
+	std::string	generate_random_string() {
+		std::string	dst;
+		size_t		str_len;
+		size_t		i;
+		char		symbol;
+
+		std::srand(std::time(NULL));
+		str_len = 2 + (std::abs(std::rand()) % 6);
+		dst.reserve(str_len + 1);
+		while (i < str_len) {
+			if (isalpha((symbol = std::abs((std::rand() % 70) + 60)))) {
+				dst += symbol;
+				++i;
+			}
+		}
+		return dst;
+	}
 
 	std::string	read_from_standart_input() {
 		char		tmp[128];
@@ -25,16 +47,15 @@ namespace {
 	}
 }
 
+namespace	Client {
 
 void	Start(const std::string &ip) {
 	ClientSocketManager	client_socket(ip);
 	Connection		con;
 	std::string		msg;
-	std::string		prefix;
+	std::string		prefix = generate_random_string();
 
-	std::cout << "started like client\nEnter a nickname for this session : ";
-	std::cin >> prefix;
-
+	std::cout << "started like client\nYour nickname for this session : " << prefix << std::endl;
 	prefix = '[' + prefix + "] : ";
 
 	while (true) {
@@ -49,6 +70,9 @@ void	Start(const std::string &ip) {
 			write_to_standart_output(msg);
 		} else if (ret == 2) {
 			msg = read_from_standart_input();
+			if (msg.size() == 0) {
+				continue;
+			}
 
 			con.send(prefix + msg);
 			if (con.isClosed()) {
@@ -56,4 +80,6 @@ void	Start(const std::string &ip) {
 			}
 		}
 	}
+}
+
 }
