@@ -28,6 +28,7 @@ class ClientSocketManager final : private SocketManagerBase_ {
 
 		Connection	getConnection() const;
 		int		poll();
+		void		endSession();
 		
 	private :
 		sockaddr_in	addr_;

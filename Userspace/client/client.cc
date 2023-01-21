@@ -27,24 +27,32 @@ namespace {
 
 
 void	Start(const std::string &ip) {
-	ClientSocketManager	cli(ip);
+	ClientSocketManager	client_socket(ip);
 	Connection		con;
 	std::string		msg;
+	std::string		prefix;
+
+	std::cout << "started like client\nEnter a nickname for this session : ";
+	std::cin >> prefix;
+
+	prefix = '[' + prefix + "] : ";
 
 	while (true) {
-		int ret = cli.poll();
-		con = cli.getConnection();
+		int ret = client_socket.poll();
+		con = client_socket.getConnection();
 		if (ret == 1) {
 			msg = con.recive();
 			if (con.isClosed()) {
+				client_socket.endSession();
 			}
 
 			write_to_standart_output(msg);
 		} else if (ret == 2) {
 			msg = read_from_standart_input();
 
-			con.send(msg);
+			con.send(prefix + msg);
 			if (con.isClosed()) {
+				client_socket.endSession();
 			}
 		}
 	}
