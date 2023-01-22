@@ -10,7 +10,7 @@ namespace {
 	std::string	generate_random_string() {
 		std::string	dst;
 		size_t		str_len;
-		size_t		i;
+		size_t		i = 0;
 		char		symbol;
 
 		std::srand(std::time(NULL));
@@ -70,7 +70,7 @@ void	Start(const std::string &ip) {
 			write_to_standart_output(msg);
 		} else if (ret == 2) {
 			msg = read_from_standart_input();
-			if (msg.size() == 0) {
+			if (msg[0] == '\n') {
 				continue;
 			}
 
