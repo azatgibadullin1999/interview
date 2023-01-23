@@ -18,7 +18,7 @@ ServerSocketManager::ServerSocketManager(const std::string &ip) {
 		throw std::exception();
 	}
 	if ((bind(socket_, reinterpret_cast<sockaddr*>(&addr_), sizeof(addr_))) < 0) {
-		throw std::exception();
+		throw ft::BindError();
 	}
 	if ((listen(socket_, 128)) < 0) {
 		throw std::exception();

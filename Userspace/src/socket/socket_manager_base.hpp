@@ -40,6 +40,13 @@ namespace ft {
 		}
 	} ;
 
+	struct BindError : SocketError {
+		BindError() { }
+		virtual ~BindError() { }
+		virtual const char	*what() const noexcept {
+			return "bind() failed\n";
+		}
+	} ;
 }
 
 // class SetsockportError : public SocketError {
