@@ -104,8 +104,11 @@ void decode(FILE* fin,FILE* fout)
 		*/
 		if (c == '1') { 
 			curr = curr->right;
-		} else {
+		} else if (c == '0') {
 			curr = curr->left;
+		}
+		if (curr == NULL) {
+			abort();
 		}
 		if (curr->isleaf) {
 			fputc(curr->symbol, fout);
