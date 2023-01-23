@@ -7,12 +7,10 @@ int	main() {
 	std::cout << "Write ip : ";
 	std::cin >> ip;
 	try {
-		Client::Start(ip);
-	} catch (ft::ConnectionError &e) {
-		if (errno == ECONNREFUSED) {
-			Server::Start(ip);
-		}
+		Server::Start(ip);
+	} catch (std::exception &e) {
+		if (errno == EADDRINUSE)
+			Client::Start(ip);
 	}
-	Client::Start(ip);
 	return 0;
 }
