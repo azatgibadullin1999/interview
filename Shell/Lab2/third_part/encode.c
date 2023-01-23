@@ -177,7 +177,7 @@ void dump_code(FILE* fp)
     Я пытался закодировать и записать текст побитово,
     но к сожалению при дикодировании, в еонце файла лишние символы
 */
-#ifdef WRITE_RAW_BITS
+#ifdef RAW_BITS
 
 int encode_to_bitstream(char symbol, char *str, size_t str_size) {
     static int  i = 0;
@@ -323,7 +323,7 @@ int main(int argc, char **argv)
 {
     /*test pq*/
 	const char *CODE_FILE = "../code.txt";
-#ifdef WRITE_RAW_BITS
+#ifdef RAW_BITS
 	const char *OUT_FILE = "../encoded";
 #else
 	const char *OUT_FILE = "../encoded.txt";

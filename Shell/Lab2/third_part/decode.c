@@ -99,7 +99,7 @@ void build_tree(FILE *fin)
 /*
 	function decode
 */
-#ifdef WRITE_RAW_BITS
+#ifdef RAW_BITS
 void decode(int fdin,int fdout)
 {
 	char c;
@@ -172,7 +172,7 @@ void freetree(struct tnode* root)
 }
 int main()
 {
-#ifdef WRITE_RAW_BITS
+#ifdef RAW_BITS
 	const char* IN_FILE="../encoded";
 #else
 	const char* IN_FILE="../encoded.txt";
