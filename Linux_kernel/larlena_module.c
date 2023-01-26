@@ -12,6 +12,13 @@
 	// #include <linux/sched.h>
 	// #include <asm/current.h>
 //
+#ifndef SCULL_QUANTUM
+# define SCULL_QUANTUM 4000
+#endif
+
+#ifndef SCULL_QSET
+# define SCULL_QSET  1000
+#endif
 
 #ifndef SCULL_NR_DEVS
 # define SCULL_NR_DEVS 1
@@ -24,8 +31,8 @@
 MODULE_LICENSE("GPL");
 
 struct ft_scull_dev {
-	// int			quantum;
-	// int			qset;
+	unsigned int		quantum;
+	unsigned int		qset;
 	unsigned long		size;
 	unsigned int		access_key;
 	struct semaphore	sem;
@@ -38,9 +45,13 @@ static struct ft_scull_dev	*scull_devices;
 static unsigned int	scull_major = SCULL_MAJOR;
 static unsigned int	scull_minor = 0;
 static unsigned int	scull_nr_devs = SCULL_NR_DEVS;
+static unsigned int	scull_quantum = SCULL_QUANTUM;
+static unsigned int	scull_qset = SCULL_QSET;
 // module_param(scull_major, ulong, S_IRUGO);
 // module_param(scull_minor, ulong, S_IRUGO);
 // module_param(scull_nr_devs, ulong, S_IRUGO);
+// module_param(scull_quantum, ulong, S_IRUGO);
+// module_param(scull_qset, ulong, S_IRUGO);
 
 
 static struct file_operations	scull_fops; /* = {
@@ -87,6 +98,8 @@ static int __init ft_larlenas_driver_init(void) {
 	}
 	memset(scull_devices, 0, scull_nr_devs * sizeof(*scull_devices));
 	while (i < scull_nr_devs) {
+		scull_devices[i].qset = scull_qset;
+		scull_devices[i].quantum = scull_quantum;
 		ft_scull_setup_cdev(&scull_devices[i], 0);
 		++i;
 	}
