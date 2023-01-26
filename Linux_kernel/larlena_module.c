@@ -47,11 +47,10 @@ static unsigned int	scull_minor = 0;
 static unsigned int	scull_nr_devs = SCULL_NR_DEVS;
 static unsigned int	scull_quantum = SCULL_QUANTUM;
 static unsigned int	scull_qset = SCULL_QSET;
-// module_param(scull_major, ulong, S_IRUGO);
-// module_param(scull_minor, ulong, S_IRUGO);
-// module_param(scull_nr_devs, ulong, S_IRUGO);
-// module_param(scull_quantum, ulong, S_IRUGO);
-// module_param(scull_qset, ulong, S_IRUGO);
+module_param(scull_major, uint, S_IRUGO);
+module_param(scull_nr_devs, uint, S_IRUGO);
+module_param(scull_quantum, uint, S_IRUGO);
+module_param(scull_qset, uint, S_IRUGO);
 
 
 static struct file_operations	scull_fops; /* = {
