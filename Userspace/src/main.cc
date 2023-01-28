@@ -8,9 +8,13 @@ int	main() {
 	std::cin >> ip;
 	try {
 		Server::Start(ip);
-	} catch (std::exception &e) {
-		if (errno == EADDRINUSE)
+	} catch (ft::BindError &e) {
+		if (errno == EADDRINUSE) {
 			Client::Start(ip);
+		}
+		else {
+			throw;
+		}
 	}
 	return 0;
 }
