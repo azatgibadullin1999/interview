@@ -1,1 +1,11 @@
+.vscode
+
 *.o
+*.sh
+
+*.cmd
+*.mod*
+*.ko
+*.order
+*.symvers
+*linux_header
