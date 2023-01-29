@@ -40,11 +40,6 @@ namespace {
 		return msg;
 	}
 
-	void		write_to_standart_output(const std::string &msg) {
-		if (write(STDOUT_FILENO, msg.c_str(), msg.size()) < 0) {
-			throw std::exception();
-		}
-	}
 }
 
 namespace	Client {
@@ -67,7 +62,7 @@ void	Start(const std::string &ip) {
 				client_socket.endSession();
 			}
 
-			write_to_standart_output(msg);
+			std::cout << msg;
 		} else if (ret == 2) {
 			msg = read_from_standart_input();
 			if (msg[0] == '\n') {
