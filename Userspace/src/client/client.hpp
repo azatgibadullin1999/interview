@@ -4,13 +4,8 @@
 # include <iostream>
 # include "../socket/client_socket_manager.hpp"
 
-
 namespace Client {
-
 	void	Start(const std::string &ip);
-
 }
 
-
-
-#endif
+#endif // USERSAPCE_CLIENT_CLIENT_HPP_
