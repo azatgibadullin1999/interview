@@ -103,8 +103,6 @@ int num_neighbors(int x, int y) {
 			neighbors_dst += get_cell_state(x + i, y + j);
 		}
 	}
-	if (get_cell_state(x, y)) {
-		--neighbors_dst;
-	}
+	neighbors_dst -= get_cell_state(x, y);
 	return neighbors_dst;
 }

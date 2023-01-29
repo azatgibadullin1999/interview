@@ -95,11 +95,9 @@ int num_neighbors(int x, int y) {
 
 	for (int i = -1; i <= 1; ++i) {
 		for (int j = -1; j <= 1; ++j) {
-			if (i == 0 && j == 0) {
-				continue;
-			}
 			neighbors_dst += get_cell_state(x + i, y + j);
 		}
 	}
+	neighbors_dst -= get_cell_state(x, y);
 	return neighbors_dst;
 }
