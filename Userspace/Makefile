@@ -15,8 +15,15 @@ SOURCE_NAME =	main$(SOURCE_EXT) \
 		socket_manager_base$(SOURCE_EXT) \
 		connection$(SOURCE_EXT)
 
+INCLUDE_NAME =	server$(INCLUDE_EXT) \
+		client$(INCLUDE_EXT) \
+		server_socket_manager$(INCLUDE_EXT) \
+		client_socket_manager$(INCLUDE_EXT) \
+		socket_manager_base$(INCLUDE_EXT) \
+		connection$(INCLUDE_EXT)
+
 SOURCE_FILES =	$(foreach P, $(SOURCE_NAME), $(shell find . -name "$(P)"))
-INCLUDE_FILES =	$(addprefix -I,$(SOURCE_FILES:$(SOURCE_EXT)=$(INCLUDE_EXT)))
+INCLUDE_FILES =	$(addprefix -I,$(foreach P, $(INCLUDE_NAME), $(shell find . -name "$(P)")))
 OBJECT_FILES =	$(SOURCE_FILES:$(SOURCE_EXT)=$(OBJECT_EXT))
 
 all: $(EXECUTABLE_FILE)
