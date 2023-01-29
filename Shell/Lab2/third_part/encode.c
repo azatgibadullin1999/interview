@@ -316,6 +316,16 @@ void    create_tree_from_list() {
     /*init root*/
     root = p;
 }
+
+void    clear_resources(struct tnode *node) {
+    if (node->left) {
+        clear_resources(node->left);
+    }
+    if (node->right) {
+        clear_resources(node->right);
+    }
+    free(node);
+}
 /*
     @function main
 */
@@ -360,7 +370,9 @@ int main(int argc, char **argv)
 	// encode(fin, stdout);
 	encode(fdin, fdout);
 	close(fdout);
+    close(fdin);
 	getchar();
 	/*TODO: clear resources*/
+    clear_resources(root);
     return 0;
 }

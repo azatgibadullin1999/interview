@@ -173,6 +173,16 @@ void encode(char* str,FILE* fout)
 		str++;
 	}
 }
+
+void    clear_resources(struct tnode *node) {
+    if (node->left) {
+        clear_resources(node->left);
+    }
+    if (node->right) {
+        clear_resources(node->right);
+    }
+    free(node);
+}
 /*
     @function main
 */
@@ -244,5 +254,6 @@ int main()
 	fclose(fout);
 	getchar();
 	/*TODO: clear resources*/
+    clear_resources(root);
     return 0;
 }
