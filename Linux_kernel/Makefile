@@ -1,4 +1,5 @@
-obj-m := larlena_module.o
+obj-m := larlena_module_pipe.o
+EXTRA_CFLAGS += -O2
 # ccflags-y=-std=c11
 
 all :
@@ -7,4 +8,4 @@ all :
 clean :
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
 
-re : clear all
+re : clean all
