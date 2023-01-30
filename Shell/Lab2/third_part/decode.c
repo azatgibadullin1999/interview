@@ -124,6 +124,9 @@ void decode(int fdin,int fdout)
 			} else {
 				curr = curr->left;
 			}
+			if (curr == NULL) {
+				abort();
+			}
 			++i;
 			if (curr->isleaf) {
 				write(fdout, &curr->symbol, sizeof(curr->symbol));
@@ -149,6 +152,9 @@ void decode(int fdin, int fdout)
 			curr = curr->right;
 		} else {
 			curr = curr->left;
+		}
+		if (curr == NULL) {
+			abort();
 		}
 		if (curr->isleaf) {
 			write(fdout, &curr->symbol, sizeof(curr->symbol));

@@ -26,13 +26,16 @@ namespace {
 	}
 
 	std::string	read_from_standart_input() {
-		char		tmp[128];
+		char		tmp[1024];
+		size_t		tmp_size = sizeof(tmp) - 1;
 		std::string	msg;
-		int		ret_value = sizeof(tmp);
+		int		ret_value = tmp_size;
 		
-		while (ret_value == sizeof(tmp) && ((ret_value = read(STDIN_FILENO, tmp, sizeof(tmp))) > 0)) {
-			tmp[ret_value] = '\0';
-			msg += tmp;
+		while (	static_cast<size_t>(ret_value) == tmp_size
+			&& tmp[--ret_value] != '\n'
+			&& ((ret_value = read(STDIN_FILENO, tmp, tmp_size)) > 0)) {
+				tmp[ret_value] = '\0';
+				msg += tmp;
 		}
 		if (ret_value < 0) {
 			throw std::exception();
@@ -40,11 +43,6 @@ namespace {
 		return msg;
 	}
 
-	void		write_to_standart_output(const std::string &msg) {
-		if (write(STDOUT_FILENO, msg.c_str(), msg.size()) < 0) {
-			throw std::exception();
-		}
-	}
 }
 
 namespace	Client {
@@ -67,7 +65,7 @@ void	Start(const std::string &ip) {
 				client_socket.endSession();
 			}
 
-			write_to_standart_output(msg);
+			std::cout << msg;
 		} else if (ret == 2) {
 			msg = read_from_standart_input();
 			if (msg[0] == '\n') {
