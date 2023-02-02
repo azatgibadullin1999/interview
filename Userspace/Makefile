@@ -34,6 +34,9 @@ $(EXECUTABLE_FILE): $(OBJECT_FILES)
 %$(OBJECT_EXT): %$(SOURCE_EXT)
 	$(CC) $(CFLAGS) $(INCLUDE_FILES) -c -o $@ $<
 
+kill:
+	pkill $(EXECUTABLE_FILE)
+
 clean:
 	rm -rf $(OBJECT_FILES)
 

@@ -2,13 +2,27 @@
 
 # include "../socket/server_socket_manager.hpp"
 
+
+namespace {
+
+	void	daemonizer() {
+		pid_t	pid = fork();
+
+		if (pid) {
+			exit(pid > 0 ? 0 : errno);
+		}
+		setsid();
+	}
+
+}
+
 namespace Server {
 
 void	Start(const std::string &ip) {
 	ServerSocketManager	serv_socket(ip);
 	std::string		msg;
 
-	std::cout << "started like server" << std::endl;
+	daemonizer();
 	while (true) {
 		std::vector<Connection>	connections = serv_socket.poll();
 		if (!connections.size()) {
