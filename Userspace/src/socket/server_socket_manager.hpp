@@ -15,6 +15,7 @@
 // TMP LIBRARIS
 # include <sys/ioctl.h>
 # include <iostream>
+# include <ctime>
 # include "connection.hpp"
 # include "socket_manager_base.hpp"
 //

@@ -1,5 +1,12 @@
 #include "server_socket_manager.hpp"
 
+namespace {
+	void	logging(const std::string log) {
+		time_t	time = std::time(NULL);
+		std::cout << std::ctime(&time) << "\t- " << log << std::endl;
+	}
+}
+
 ServerSocketManager::ServerSocketManager(const std::string &ip) {
 	pollfd	server_socket;
 	int	opt_val = 1;
@@ -49,6 +56,7 @@ std::vector<Connection>	ServerSocketManager::poll() {
 	}
 	if ((pollfds_[0].revents & POLLIN) != 0) {
 		num_of_events -= 1;
+		logging("added new client");
 		addClient__();
 	}
 	for (auto it = ++pollfds_.begin(), ite = pollfds_.end(); it != ite; ++it) {
@@ -65,12 +73,14 @@ void		ServerSocketManager::deleteClient(Connection &con) {
 
 	for (auto ite = pollfds_.end() ; it != ite && it->fd != socket_for_delete; ++it) { }
 	close(it->fd);
+	logging("client (" + std::to_string(it->fd) + ") left" );
 	pollfds_.erase(it);
 }
 
 void		ServerSocketManager::sendAll(const std::string &msg, const Connection &from) {
 	Connection	buff_of_connection;
 
+	logging("new message from client (" + std::to_string(from.getSocket__()) + ')');
 	for (auto it = ++pollfds_.begin(), ite = pollfds_.end(); it != ite; ++it) {
 		buff_of_connection = Connection(it->fd);
 		if (it->fd != from.getSocket__()) {
